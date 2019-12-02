@@ -43,7 +43,7 @@ public class EmailServiceImpl implements EmailService {
 			mail.personalization.get(0).addCc(ccs.get(i));
 		}
 
-		SendGrid sg = new SendGrid("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");
+		SendGrid sg = new SendGrid("");
 		Request request = new Request();
 		try {
 			request.setMethod(Method.POST);
