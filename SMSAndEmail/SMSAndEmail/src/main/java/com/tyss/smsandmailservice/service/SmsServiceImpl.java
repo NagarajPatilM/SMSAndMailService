@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.tyss.smsandmailservice.dto.SmsBean;
 
+import lombok.extern.java.Log;
+@Log
 @Service
 public class SmsServiceImpl implements SmsService {
 
@@ -29,15 +31,15 @@ public class SmsServiceImpl implements SmsService {
 			conn.setRequestProperty("Content-Length", Integer.toString(data.length()));
 			conn.getOutputStream().write(data.getBytes("UTF-8"));
 			final BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			final StringBuffer stringBuffer = new StringBuffer();
+			final String string = new String();
 			String line;
 			while ((line = rd.readLine()) != null) {
-				stringBuffer.append(line);
+				string.concat(line);
 			}
 			rd.close();
-			return stringBuffer.toString();
+			return string.toString();
 		} catch (Exception e) {
-			System.out.println("Error SMS " + e);
+			log.info("Exception"+e);
 			return "Error " + e;
 		}
 	}
