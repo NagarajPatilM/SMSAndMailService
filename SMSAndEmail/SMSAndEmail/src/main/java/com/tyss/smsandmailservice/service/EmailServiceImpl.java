@@ -80,7 +80,7 @@ public class EmailServiceImpl implements EmailService {
 			}
 		}
 
-		SendGrid sg = new SendGrid("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");
+		SendGrid sg = new SendGrid("");
 		Request request = new Request();
 		try {
 			request.setMethod(Method.POST);
@@ -153,7 +153,7 @@ public class EmailServiceImpl implements EmailService {
 			}
 		}
 
-		SendGrid sg = new SendGrid("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");
+		SendGrid sg = new SendGrid("");
 		Request request = new Request();
 		try {
 			request.setMethod(Method.POST);
