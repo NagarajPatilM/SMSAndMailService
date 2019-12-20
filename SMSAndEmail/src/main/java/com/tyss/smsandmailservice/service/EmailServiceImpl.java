@@ -173,7 +173,7 @@ public class EmailServiceImpl implements EmailService {
 					mail.addAttachments(attachments2);
 				}
 			} // End of for loop
-			SendGrid sg = new SendGrid("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");
+			SendGrid sg = new SendGrid("");
 			Request request = new Request();
 			request.setMethod(Method.POST);
 			request.setEndpoint("mail/send");
