@@ -3,15 +3,13 @@ package com.tyss.smsandmailservice.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Properties;
 
-//import java.util.Base64;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.json.JSONArray;
@@ -27,6 +25,8 @@ import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
+import com.tyss.smsandmailservice.dto.DataBean;
+import com.tyss.smsandmailservice.dto.SmsAndEmailResponse;
 
 import lombok.extern.java.Log;
 
@@ -34,19 +34,14 @@ import lombok.extern.java.Log;
 @Service
 public class EmailServiceImpl implements EmailService {
 
-	public com.tyss.smsandmailservice.dto.Response sendEmail2(String from, String tos, String subject, String ccs,
-			String content, List<MultipartFile> file) throws Exception {
+	public com.tyss.smsandmailservice.dto.SmsAndEmailResponse sendEmail(String from, String tos, String subject,
+			String ccs, String content, List<MultipartFile> file) {
 
-//		Attachments attachement1 = null;
-//		Attachments attachement2 = null;
-//		Attachments attachement3 = null;
-//		Attachments attachement4 = null;
-//		Attachments attachement5 = null;
-//		Attachments[] arr = { attachement1, attachement2, attachement3, attachement4, attachement5 };
-		com.tyss.smsandmailservice.dto.Response responseBean = new com.tyss.smsandmailservice.dto.Response();
+		SmsAndEmailResponse responseBean = new SmsAndEmailResponse();
 		Mail mail = new Mail();
 		FileOutputStream fos = null;
 		FileInputStream fis = null;
+		FileReader fileReader = null;
 
 		try {
 			ArrayList<String> to = jsonStringToArray(tos); // converting Stringified JSON to ArrayList<String>.
@@ -65,7 +60,6 @@ public class EmailServiceImpl implements EmailService {
 
 			mail.addPersonalization(personalization);
 
-			
 			for (int j = 1; j < to.size(); j++) {
 				if (to.get(j) != null) {
 					mail.personalization.get(0).addTo(new Email(to.get(j)));
@@ -78,17 +72,18 @@ public class EmailServiceImpl implements EmailService {
 				}
 			}
 
+			/*
+			 * for loop iterates for no. of attachments sent
+			 */
+
 			for (int i = 0; i < file.size(); i++) {
 
 				String fileName = file.get(i).getOriginalFilename();
 				String[] ext = fileName.split("\\.");
-				for (int k = 0; k < ext.length; k++) {
-					log.info(ext[k]);
-				}
+
 				if (ext[1].equalsIgnoreCase("txt")) {
-					/**
-		        	 * Attachement for txt file goes here
-					 */
+
+					// Attachment for text file goes here
 
 					File convFile = new File(file.get(i).getOriginalFilename());
 					fos = new FileOutputStream(convFile);
@@ -109,24 +104,21 @@ public class EmailServiceImpl implements EmailService {
 					attachement.setFilename(file.get(i).getOriginalFilename());
 					attachement.setDisposition("attachment");
 					attachement.setContentId("Banner");
-					mail.addAttachments(attachement); // End of attachement 1
+					mail.addAttachments(attachement); // End of attachments 1
+
 				} else if (ext[1].equals("pdf")) {
 
-					/**
-					 * Attachement for pdf file goes here below
-					 */
-
-					final boolean IS_CHUNKED = true;
+					// Attachment for pdf file goes here below
 
 					File convFile1 = new File(file.get(i).getOriginalFilename());
-					
+
 					byte[] c = file.get(i).getBytes();
 
 					byte[] encodedBytes = Base64.getEncoder().encode(c);
 					String pngInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
 					String pngContent = new String(c, 0, c.length, "UTF-8");
-					FileOutputStream fos1 = new FileOutputStream(convFile1);
-					fos1.write(file.get(i).getBytes());
+					fos = new FileOutputStream(convFile1);
+					fos.write(file.get(i).getBytes());
 					PDDocument document = PDDocument.load(convFile1);
 
 					// Instantiate PDFTextStripper class
@@ -151,18 +143,17 @@ public class EmailServiceImpl implements EmailService {
 					attachments2.setContentId("Balance Sheet");
 					attachments2.setType("application/pdf");
 					mail.addAttachments(attachments2);
-				} else if(ext[1].equalsIgnoreCase("png")) {
 
-					/**
-					 * Attachement for png file goes here below
-					 */
+				} else if (ext[1].equalsIgnoreCase("png")) {
+
+					// Attachment for png file goes here below
 
 					byte[] c = file.get(i).getBytes();
 					byte[] encodedBytes = Base64.getEncoder().encode(c);
 					String pngInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
 					log.info(pngInBase64);
 					String pngContent = new String(c, 0, c.length, "UTF-8");
-					log.info("\n"+pngContent);
+					log.info("\n" + pngContent);
 
 					Attachments attachments2 = new Attachments();
 					attachments2.setContent(pngInBase64);
@@ -173,30 +164,40 @@ public class EmailServiceImpl implements EmailService {
 					mail.addAttachments(attachments2);
 				}
 			} // End of for loop
-			SendGrid sg = new SendGrid("");
+			fileReader = new FileReader(
+					"C:\\new-eclipse-workspace\\SMSAndMailService\\SMSAndEmail\\src\\main\\java\\attachements.properties");
+			Properties properties = new Properties();
+			properties.load(fileReader);
+			SendGrid sg = new SendGrid(properties.getProperty("ApiKey"));
 			Request request = new Request();
 			request.setMethod(Method.POST);
 			request.setEndpoint("mail/send");
 			request.setBody(mail.build());
 			Response response = sg.api(request);
-			responseBean.setStatusCode(201);
+			responseBean.setData(new DataBean());
+			responseBean.setError(false);
 			responseBean.setMessage("Success");
-			responseBean.setDescription("Email sent successfully");
-			log.info(" " + responseBean.getStatusCode());
 			return responseBean;
 		} // End of try
 		catch (Exception e) {
 			log.info("Exception message" + e);
 			responseBean.setMessage("Exception");
-			responseBean.setStatusCode(501);
+			responseBean.setError(true);
 			return responseBean;
 		} // End of catch
 		finally {
-			if (fos != null) {
-				fos.close();
-			}
-			if (fis != null) {
-				fis.close();
+			try {
+				if (fos != null) {
+					fos.close();
+				}
+				if (fis != null) {
+					fis.close();
+				}
+				if (fileReader != null) {
+					fileReader.close();
+				}
+			} catch (IOException e) {
+				log.info("Exception occured " + e);
 			}
 		} // End of finally
 	} // End of sendEmail2()

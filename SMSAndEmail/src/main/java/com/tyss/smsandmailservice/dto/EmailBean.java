@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sendgrid.helpers.mail.objects.Email;
 
 import lombok.Data;
-//@JsonIgnoreProperties(ignoreUnknown = true)
+
 @SuppressWarnings("serial")
 @Data
 public class EmailBean implements Serializable{
@@ -19,6 +19,6 @@ public class EmailBean implements Serializable{
 	private List<Email> tos;
 	private List<Email> ccs;
 	private String content;
-//	private MultipartFile attachements; 
+
 
 }

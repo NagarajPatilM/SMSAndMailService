@@ -10,6 +10,5 @@ public class SmsandemailserviceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SmsandemailserviceApplication.class, args);
-
 	}
 }
