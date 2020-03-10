@@ -200,7 +200,7 @@ public class EmailServiceImpl implements EmailService {
 				log.info("Exception occured " + e);
 			}
 		} // End of finally
-	} // End of sendEmail2()
+	} // End of sendEmail()
 
 	// Method for converting String to ArrayList<String>
 	ArrayList<String> jsonStringToArray(String tos) {
