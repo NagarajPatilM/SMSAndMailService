@@ -136,13 +136,13 @@ public class EmailServiceImpl implements EmailService {
 
 					String pdfContent = new String(c, 0, c.length, "UTF-8");
 
-					Attachments attachments2 = new Attachments();
-					attachments2.setContent(pdfInBase64);
-					attachments2.setFilename(file.get(i).getOriginalFilename());
-					attachments2.setDisposition("attachment");
-					attachments2.setContentId("Balance Sheet");
-					attachments2.setType("application/pdf");
-					mail.addAttachments(attachments2);
+					Attachments attachment1 = new Attachments();
+					attachment1.setContent(pdfInBase64);
+					attachment1.setFilename(file.get(i).getOriginalFilename());
+					attachment1.setDisposition("attachment");
+					attachment1.setContentId("Balance Sheet");
+					attachment1.setType("application/pdf");
+					mail.addAttachments(attachment1);
 
 				} else if (ext[1].equalsIgnoreCase("png")) {
 
@@ -155,13 +155,13 @@ public class EmailServiceImpl implements EmailService {
 					String pngContent = new String(c, 0, c.length, "UTF-8");
 					log.info("\n" + pngContent);
 
-					Attachments attachments2 = new Attachments();
-					attachments2.setContent(pngInBase64);
-					attachments2.setFilename(file.get(i).getOriginalFilename());
-					attachments2.setDisposition("attachment");
-					attachments2.setContentId("Banner");
-					attachments2.setType("image/png");
-					mail.addAttachments(attachments2);
+					Attachments attachment2 = new Attachments();
+					attachment2.setContent(pngInBase64);
+					attachment2.setFilename(file.get(i).getOriginalFilename());
+					attachment2.setDisposition("attachment");
+					attachment2.setContentId("Banner");
+					attachment2.setType("image/png");
+					mail.addAttachments(attachment2);
 				}
 			} // End of for loop
 			fileReader = new FileReader(

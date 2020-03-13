@@ -7,12 +7,9 @@ import lombok.Data;
 
 public class SmsAndEmailResponse implements Serializable{
 	
-	/*
-	 * private int statusCode; private String message; private String description;
-	 */
+
 	
-	private boolean isError;
-	private DataBean data;
+	private boolean error;
 	private String message;
 	
 }
