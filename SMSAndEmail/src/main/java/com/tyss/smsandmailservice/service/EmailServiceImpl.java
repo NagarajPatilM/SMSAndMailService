@@ -25,7 +25,6 @@ import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
-import com.tyss.smsandmailservice.dto.DataBean;
 import com.tyss.smsandmailservice.dto.SmsAndEmailResponse;
 
 import lombok.extern.java.Log;
@@ -174,7 +173,6 @@ public class EmailServiceImpl implements EmailService {
 			request.setEndpoint("mail/send");
 			request.setBody(mail.build());
 			Response response = sg.api(request);
-			responseBean.setData(new DataBean());
 			responseBean.setError(false);
 			responseBean.setMessage("Success");
 			return responseBean;
