@@ -71,100 +71,105 @@ public class EmailServiceImpl implements EmailService {
 				}
 			}
 
-			/*
-			 * for loop iterates for no. of attachments sent
-			 */
+			if (file != null) {
+				log.info("file size ==== " + file.size());
 
-			for (int i = 0; i < file.size(); i++) {
+				/*
+				 * for loop iterates for no. of attachments sent
+				 */
+				for (int i = 0; i < file.size(); i++) {
 
-				String fileName = file.get(i).getOriginalFilename();
-				String[] ext = fileName.split("\\.");
+					String fileName = file.get(i).getOriginalFilename();
+					String[] ext = fileName.split("\\.");
 
-				if (ext[1].equalsIgnoreCase("txt")) {
+					if (ext[1].equalsIgnoreCase("txt")) {
 
-					// Attachment for text file goes here
+						// Attachment for text file goes here
 
-					File convFile = new File(file.get(i).getOriginalFilename());
-					fos = new FileOutputStream(convFile);
-					fos.write(file.get(i).getBytes());
-					fos.close();
+						File convFile = new File(file.get(i).getOriginalFilename());
+						fos = new FileOutputStream(convFile);
+						fos.write(file.get(i).getBytes());
+						fos.close();
 
-					byte[] fileData = new byte[(int) convFile.length()];
+						byte[] fileData = new byte[(int) convFile.length()];
 
-					fis = new FileInputStream(convFile);
-					fis.read(fileData); // read file into bytes[]
-					fis.close();
+						fis = new FileInputStream(convFile);
+						fis.read(fileData); // read file into bytes[]
+						fis.close();
 
-					Attachments attachement = new Attachments();
-					String con = new String(fileData, 0, (int) convFile.length(), "UTF-8");
-					String attachementContent = java.util.Base64.getMimeEncoder().encodeToString(con.getBytes());
-					attachement.setContent(attachementContent);
-					attachement.setType("application/text");
-					attachement.setFilename(file.get(i).getOriginalFilename());
-					attachement.setDisposition("attachment");
-					attachement.setContentId("Banner");
-					mail.addAttachments(attachement); // End of attachments 1
+						Attachments attachement = new Attachments();
+						String con = new String(fileData, 0, (int) convFile.length(), "UTF-8");
+						String attachementContent = java.util.Base64.getMimeEncoder().encodeToString(con.getBytes());
+						attachement.setContent(attachementContent);
+						attachement.setType("application/text");
+						attachement.setFilename(file.get(i).getOriginalFilename());
+						attachement.setDisposition("attachment");
+						attachement.setContentId("Banner");
+						mail.addAttachments(attachement); // End of attachments
 
-				} else if (ext[1].equals("pdf")) {
+					} else if (ext[1].equals("pdf")) {
 
-					// Attachment for pdf file goes here below
+						// Attachment for pdf file goes here below
 
-					File convFile1 = new File(file.get(i).getOriginalFilename());
+						File convFile1 = new File(file.get(i).getOriginalFilename());
 
-					byte[] c = file.get(i).getBytes();
+						byte[] c = file.get(i).getBytes();
 
-					byte[] encodedBytes = Base64.getEncoder().encode(c);
-					String pngInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
-					String pngContent = new String(c, 0, c.length, "UTF-8");
-					fos = new FileOutputStream(convFile1);
-					fos.write(file.get(i).getBytes());
-					PDDocument document = PDDocument.load(convFile1);
+						byte[] encodedBytes = Base64.getEncoder().encode(c);
+						String pngInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
+						String pngContent = new String(c, 0, c.length, "UTF-8");
+						fos = new FileOutputStream(convFile1);
+						fos.write(file.get(i).getBytes());
+						PDDocument document = PDDocument.load(convFile1);
 
-					// Instantiate PDFTextStripper class
-					PDFTextStripper pdfStripper = new PDFTextStripper();
+						// Instantiate PDFTextStripper class
+						PDFTextStripper pdfStripper = new PDFTextStripper();
 
-					// Retrieving text from PDF document
-					String text = pdfStripper.getText(document);
-					// Closing the document
-					document.close();
+						// Retrieving text from PDF document
+						String text = pdfStripper.getText(document); // Closing the document
+						document.close();
 
-					byte[] c1 = text.getBytes();
+						byte[] c1 = text.getBytes();
 
-					byte[] encodedBytes1 = java.util.Base64.getEncoder().encode(c);
-					String pdfInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
+						byte[] encodedBytes1 = java.util.Base64.getEncoder().encode(c);
+						String pdfInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
 
-					String pdfContent = new String(c, 0, c.length, "UTF-8");
+						String pdfContent = new String(c, 0, c.length, "UTF-8");
 
-					Attachments attachment1 = new Attachments();
-					attachment1.setContent(pdfInBase64);
-					attachment1.setFilename(file.get(i).getOriginalFilename());
-					attachment1.setDisposition("attachment");
-					attachment1.setContentId("Balance Sheet");
-					attachment1.setType("application/pdf");
-					mail.addAttachments(attachment1);
+						Attachments attachment1 = new Attachments();
+						attachment1.setContent(pdfInBase64);
+						attachment1.setFilename(file.get(i).getOriginalFilename());
+						attachment1.setDisposition("attachment");
+						attachment1.setContentId("Balance Sheet");
+						attachment1.setType("application/pdf");
+						mail.addAttachments(attachment1);
 
-				} else if (ext[1].equalsIgnoreCase("png")) {
+					} else if (ext[1].equalsIgnoreCase("png")) {
 
-					// Attachment for png file goes here below
+						// Attachment for png file goes here below
 
-					byte[] c = file.get(i).getBytes();
-					byte[] encodedBytes = Base64.getEncoder().encode(c);
-					String pngInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
-					log.info(pngInBase64);
-					String pngContent = new String(c, 0, c.length, "UTF-8");
-					log.info("\n" + pngContent);
+						byte[] c = file.get(i).getBytes();
+						byte[] encodedBytes = Base64.getEncoder().encode(c);
+						String pngInBase64 = new String(encodedBytes, 0, encodedBytes.length, "UTF-8");
+						log.info(pngInBase64);
+						String pngContent = new String(c, 0, c.length, "UTF-8");
+						log.info("\n" + pngContent);
 
-					Attachments attachment2 = new Attachments();
-					attachment2.setContent(pngInBase64);
-					attachment2.setFilename(file.get(i).getOriginalFilename());
-					attachment2.setDisposition("attachment");
-					attachment2.setContentId("Banner");
-					attachment2.setType("image/png");
-					mail.addAttachments(attachment2);
-				}
-			} // End of for loop
-			fileReader = new FileReader(
-					"C:\\new-eclipse-workspace\\SMSAndMailService\\SMSAndEmail\\src\\main\\java\\attachements.properties");
+						Attachments attachment2 = new Attachments();
+						attachment2.setContent(pngInBase64);
+						attachment2.setFilename(file.get(i).getOriginalFilename());
+						attachment2.setDisposition("attachment");
+						attachment2.setContentId("Banner");
+						attachment2.setType("image/png");
+						mail.addAttachments(attachment2);
+					}
+				} // End of for loop
+
+			} else {
+				log.info("no files sent as an attachement");
+			}
+
+			fileReader = new FileReader("C:\\mail_exp\\SMSAndEmail\\src\\main\\resources\\attachements.properties");
 			Properties properties = new Properties();
 			properties.load(fileReader);
 			SendGrid sg = new SendGrid(properties.getProperty("ApiKey"));

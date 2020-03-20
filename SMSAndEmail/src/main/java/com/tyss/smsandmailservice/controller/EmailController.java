@@ -34,7 +34,7 @@ public class EmailController {
 	private EmailService service;
 
 	@PostMapping(value = "/send-email", produces = MediaType.APPLICATION_JSON_VALUE, consumes = { "multipart/form-data",
-			"application/json" })
+			"application/json","application/x-www-form-urlencoded;charset=UTF-8" })
 	public SmsAndEmailResponse sendEmail(@RequestHeader String from, @RequestHeader String subject,
 			@RequestHeader String tos, @RequestHeader String ccs, @RequestHeader String content,
 			@RequestBody List<MultipartFile> file) throws Exception {
