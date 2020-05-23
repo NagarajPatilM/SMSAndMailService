@@ -38,7 +38,7 @@ public class EmailController {
 	public SmsAndEmailResponse sendEmail(@RequestHeader String from, @RequestHeader String subject,
 			@RequestHeader String tos, @RequestHeader String ccs, @RequestHeader String content,
 			@RequestBody List<MultipartFile> file) throws Exception {
-		log.info("file" + file);
+		log.info("file : " + file);
 		return service.sendEmail(from, tos, subject, ccs, content, file);
 	}
 

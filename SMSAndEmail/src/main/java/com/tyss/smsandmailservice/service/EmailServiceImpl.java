@@ -168,11 +168,11 @@ public class EmailServiceImpl implements EmailService {
 			} else {
 				log.info("no files sent as an attachement");
 			}
-
-			fileReader = new FileReader("C:\\mail_exp\\SMSAndEmail\\src\\main\\resources\\attachements.properties");
+			
+			fileReader = new FileReader("D:\\nagaraj\\internal_projects\\SMSAndMailService\\SMSAndEmail\\src\\main\\resources\\application.properties");
 			Properties properties = new Properties();
 			properties.load(fileReader);
-			SendGrid sg = new SendGrid(properties.getProperty("ApiKey"));
+			SendGrid sg = new SendGrid(properties.getProperty("spring.sendgrid.api-key"));
 			Request request = new Request();
 			request.setMethod(Method.POST);
 			request.setEndpoint("mail/send");
@@ -183,8 +183,8 @@ public class EmailServiceImpl implements EmailService {
 			return responseBean;
 		} // End of try
 		catch (Exception e) {
-			log.info("Exception message" + e);
-			responseBean.setMessage("Exception");
+			log.severe("Exception message : " + e);
+			responseBean.setMessage("Exception "+e);
 			responseBean.setError(true);
 			return responseBean;
 		} // End of catch
