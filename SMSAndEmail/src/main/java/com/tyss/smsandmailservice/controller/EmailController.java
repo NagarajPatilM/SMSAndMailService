@@ -19,10 +19,8 @@ import com.tyss.smsandmailservice.service.EmailService;
 import lombok.extern.java.Log;
 
 /**
- * 
- * The class contains methods which handles the requests related to Email coming
+ * The class {@code EmailController} contains methods which handles the requests related to Email coming
  * from the Browser and interacts with the service layer for the Response
- *
  */
 @Log
 @RestController
@@ -34,9 +32,9 @@ public class EmailController {
 	private EmailService service;
 
 	@PostMapping(value = "/send-email", produces = MediaType.APPLICATION_JSON_VALUE, consumes = { "multipart/form-data",
-			"application/json","application/x-www-form-urlencoded;charset=UTF-8" })
+	 "application/json", "application/x-www-form-urlencoded;charset=UTF-8" , "text/plain"})
 	public SmsAndEmailResponse sendEmail(@RequestHeader String from, @RequestHeader String subject,
-			@RequestHeader String tos, @RequestHeader String ccs, @RequestHeader String content,
+			@RequestHeader String tos, @RequestHeader String ccs, @RequestBody String content,
 			@RequestBody List<MultipartFile> file) throws Exception {
 		log.info("file : " + file);
 		return service.sendEmail(from, tos, subject, ccs, content, file);

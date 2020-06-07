@@ -10,15 +10,29 @@ import org.springframework.stereotype.Service;
 import com.tyss.smsandmailservice.dto.SmsBean;
 
 import lombok.extern.java.Log;
+
+/**
+ * The {@code SmsServiceImpl} class provides the implementation to the abstract
+ * methods od {@code SmsService} interface. In this class we are making an API
+ * call to TextLocal API to send sms's
+ */
 @Log
 @Service
 public class SmsServiceImpl implements SmsService {
+
+	/**
+	 * Sends SMS to the given number with the given message
+	 * 
+	 * @param smsBean the bean which contains mobile number and message to which the
+	 *                SMS has to be sent
+	 * @return String
+	 */
 
 	@Override
 	public String sendSms(SmsBean smsBean) {
 		try {
 			// Construct data
-			String apiKey = "apikey=" + "VAsK3r/03PQ-K9YUfWPh4DGYWKF9NVjohIKXyqrkJj";
+			String apiKey = "apikey=" + "xyz";
 			String message = "&message=" + smsBean.getMessage();
 			String sender = "&sender=" + "TXTLCL";
 			String numbers = "&numbers=" + smsBean.getNumber();
@@ -38,9 +52,10 @@ public class SmsServiceImpl implements SmsService {
 			}
 			rd.close();
 			return string.toString();
-		} catch (Exception e) {
-			log.info("Exception"+e);
+		} // End of try
+		catch (Exception e) {
+			log.info("Exception " + e);
 			return "Error " + e;
-		}
-	}
-}
+		} // End of catch
+	}// End of sendSms()
+}// End of class

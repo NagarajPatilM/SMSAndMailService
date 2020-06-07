@@ -11,6 +11,5 @@ public class SmsBean implements Serializable {
 
 	private String message;
 	private String number;
-	
-	
+		
 }

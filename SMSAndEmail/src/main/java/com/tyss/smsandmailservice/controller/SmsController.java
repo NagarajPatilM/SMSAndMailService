@@ -14,11 +14,9 @@ import com.tyss.smsandmailservice.service.SmsService;
 
 
 /**
- * 
- * The class contains methods which handles the 
+ * The class {@code SmsController} contains methods which handles the 
  * requests related to SMS coming from the Browser and interacts 
  * with the service layer for the Response
- *
  */
 
 @RestController

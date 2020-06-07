@@ -29,12 +29,31 @@ import com.tyss.smsandmailservice.dto.SmsAndEmailResponse;
 
 import lombok.extern.java.Log;
 
+/**
+ * 
+ * The {@code EmailServiceImpl} class contains implemented methods of
+ * {@code EmailService} interface. In this class we are making an API call to
+ * Sendgrid API to send Emails
+ */
 @Log
 @Service
 public class EmailServiceImpl implements EmailService {
 
-	public com.tyss.smsandmailservice.dto.SmsAndEmailResponse sendEmail(String from, String tos, String subject,
-			String ccs, String content, List<MultipartFile> file) {
+	/**
+	 * Sends the mail with the below information 
+	 * 
+	 * @param from    the mail-id from which the mail has to be sent
+	 * @param tos     the mail-id's to which the mail has to be sent
+	 * @param subject the subject of the mail
+	 * @param ccs     the mail-id's to which the mail has to be sent
+	 * @param content the content of the mail
+	 * @param file    the attachment to the mail
+	 * 
+	 * @return ({@code SmsAndEmailResponse}
+	 * 
+	 */
+	public SmsAndEmailResponse sendEmail(String from, String tos, String subject, String ccs, String content,
+			List<MultipartFile> file) {
 
 		SmsAndEmailResponse responseBean = new SmsAndEmailResponse();
 		Mail mail = new Mail();
@@ -168,8 +187,9 @@ public class EmailServiceImpl implements EmailService {
 			} else {
 				log.info("no files sent as an attachement");
 			}
-			
-			fileReader = new FileReader("D:\\nagaraj\\internal_projects\\SMSAndMailService\\SMSAndEmail\\src\\main\\resources\\application.properties");
+
+			fileReader = new FileReader(
+					"D:\\nagaraj\\internal_projects\\SMSAndMailService\\SMSAndEmail\\src\\main\\resources\\application.properties");
 			Properties properties = new Properties();
 			properties.load(fileReader);
 			SendGrid sg = new SendGrid(properties.getProperty("spring.sendgrid.api-key"));
@@ -184,7 +204,7 @@ public class EmailServiceImpl implements EmailService {
 		} // End of try
 		catch (Exception e) {
 			log.severe("Exception message : " + e);
-			responseBean.setMessage("Exception "+e);
+			responseBean.setMessage("Exception " + e);
 			responseBean.setError(true);
 			return responseBean;
 		} // End of catch
@@ -215,4 +235,4 @@ public class EmailServiceImpl implements EmailService {
 		return stringArray;
 	} // End of jsonStringToArray( )
 
-}
+}// End of class
